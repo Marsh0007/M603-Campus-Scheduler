@@ -1,0 +1,114 @@
+{
+    "final_schedule": [
+        {
+            "class": "CS101",
+            "students": 120,
+            "time": "09:00",
+            "room": "AUD1",
+            "wasted_seats": 60,
+            "status": "Scheduled"
+        },
+        {
+            "class": "DB201",
+            "students": 80,
+            "time": "09:00",
+            "room": "R201",
+            "wasted_seats": 20,
+            "status": "Scheduled"
+        },
+        {
+            "class": "ENG101",
+            "students": 35,
+            "time": "09:00",
+            "room": "R101",
+            "wasted_seats": 5,
+            "status": "Scheduled"
+        },
+        {
+            "class": "MATH101",
+            "students": 100,
+            "time": "10:00",
+            "room": "R201",
+            "wasted_seats": 0,
+            "status": "Scheduled"
+        },
+        {
+            "class": "NET203",
+            "students": 45,
+            "time": "10:00",
+            "room": "R102",
+            "wasted_seats": 15,
+            "status": "Scheduled"
+        },
+        {
+            "class": "BUS101",
+            "students": 30,
+            "time": "10:00",
+            "room": "R101",
+            "wasted_seats": 10,
+            "status": "Scheduled"
+        },
+        {
+            "class": "HIST101",
+            "students": 25,
+            "time": "10:00",
+            "room": "AUD1",
+            "wasted_seats": 155,
+            "status": "Scheduled"
+        },
+        {
+            "class": "AI301",
+            "students": 70,
+            "time": "11:00",
+            "room": "R201",
+            "wasted_seats": 30,
+            "status": "Scheduled"
+        },
+        {
+            "class": "WEB102",
+            "students": 55,
+            "time": "11:00",
+            "room": "R102",
+            "wasted_seats": 5,
+            "status": "Scheduled"
+        },
+        {
+            "class": "SE202",
+            "students": 50,
+            "time": "11:00",
+            "room": "AUD1",
+            "wasted_seats": 130,
+            "status": "Scheduled"
+        }
+    ],
+    "conflict_report": {
+        "total_classes": 10,
+        "scheduled_classes": 10,
+        "unscheduled_classes": 0,
+        "total_capacity_waste": 430,
+        "unscheduled_details": []
+    },
+    "quality_analysis": {
+        "greedy_waste": 250,
+        "optimized_waste": 430,
+        "waste_improvement": -180,
+        "scheduling_success_rate": 100.0,
+        "average_waste_per_class": 43.0,
+        "quality_score": 91.4
+    },
+    "professor_analysis": {
+        "professor_workload": {
+            "P1": 2,
+            "P3": 2,
+            "P6": 1,
+            "P2": 1,
+            "P7": 1,
+            "P8": 1,
+            "P4": 1,
+            "P5": 1
+        },
+        "max_load": 2,
+        "min_load": 1,
+        "load_difference": 1
+    }
+}

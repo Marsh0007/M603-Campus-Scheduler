@@ -1,0 +1,31 @@
+{
+  "time_slots": ["09:00", "10:00", "11:00", "12:00"],
+
+  "rooms": [
+    {"id": "R101", "capacity": 40},
+    {"id": "R102", "capacity": 60},
+    {"id": "R201", "capacity": 100},
+    {"id": "AUD1", "capacity": 180}
+  ],
+
+  "classes": [
+    {"id": "CS101", "students": 120, "professor": "P1"},
+    {"id": "MATH101", "students": 100, "professor": "P2"},
+    {"id": "DB201", "students": 80, "professor": "P3"},
+    {"id": "AI301", "students": 70, "professor": "P1"},
+    {"id": "WEB102", "students": 55, "professor": "P4"},
+    {"id": "SE202", "students": 50, "professor": "P5"},
+    {"id": "NET203", "students": 45, "professor": "P3"},
+    {"id": "ENG101", "students": 35, "professor": "P6"},
+    {"id": "BUS101", "students": 30, "professor": "P7"},
+    {"id": "HIST101", "students": 25, "professor": "P8"}
+  ],
+
+  "student_groups": {
+    "G1_ComputerScience": ["CS101", "MATH101", "WEB102"],
+    "G2_DataScience": ["MATH101", "DB201", "AI301"],
+    "G3_Networking": ["CS101", "NET203", "SE202"],
+    "G4_Business": ["BUS101", "ENG101"],
+    "G5_General": ["HIST101", "ENG101"]
+  }
+}

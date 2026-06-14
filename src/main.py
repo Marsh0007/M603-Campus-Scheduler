@@ -2,7 +2,7 @@ from data_loader import load_constraints
 from greedy_solver import generate_greedy_schedule
 from graph_engine import build_conflict_graph, welsh_powell_coloring
 from optimizer import assign_rooms
-from backtracker import generate_conflict_report
+from backtracker import generate_conflict_report, run_best_effort_backtracking
 from reporter import save_results
 from quality_analyzer import analyze_schedule_quality
 from professor_analyzer import analyze_professor_workload
@@ -52,7 +52,28 @@ def main():
 
     print(f"\nTotal Capacity Waste: {total_waste}")
 
-    conflict_report = generate_conflict_report(final_schedule, total_waste)
+    backtracking_schedule, backtracking_waste, backtracking_success = run_best_effort_backtracking(
+        data["classes"],
+        data["rooms"],
+        data["time_slots"],
+        data["student_groups"]
+    )
+
+    conflict_report = generate_conflict_report(
+        backtracking_schedule,
+        backtracking_waste
+    )
+
+    print("\n===== STAGE 4: RECURSIVE BACKTRACKING BEST-EFFORT SCHEDULE =====\n")
+
+    for item in backtracking_schedule:
+        print(
+            f"{item['class_id']} | "
+            f"{item['time']} | "
+            f"{item['room']} | "
+            f"Waste: {item['waste']} | "
+            f"{item['status']}"
+        )
 
     print("\n===== STAGE 4: BEST-EFFORT CONFLICT REPORT =====\n")
 
@@ -64,7 +85,10 @@ def main():
     if conflict_report["unscheduled_details"]:
         print("\nManual Intervention Needed:")
         for item in conflict_report["unscheduled_details"]:
-            print(f"{item['class']} could not be scheduled.")
+            print(
+                f"{item['class_id']} could not be scheduled. "
+                f"Reason: {item.get('reason', 'No feasible assignment found')}"
+            )
     else:
         print("\nNo manual intervention needed. All classes were scheduled.")
 
@@ -98,7 +122,6 @@ def main():
         f"{quality_analysis['quality_score']}/100"
     )
 
-    # PROFESSOR WORKLOAD ANALYSIS
     professor_analysis = analyze_professor_workload(
         final_schedule,
         data
@@ -117,10 +140,10 @@ def main():
     )
 
     saved_file = save_results(
-    final_schedule,
-    conflict_report,
-    quality_analysis,
-    professor_analysis
+        final_schedule,
+        conflict_report,
+        quality_analysis,
+        professor_analysis
     )
 
     print(f"\nResults saved to: {saved_file}")

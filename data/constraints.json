@@ -1,31 +1,67 @@
 {
-  "time_slots": ["09:00", "10:00", "11:00", "12:00"],
+  "time_slots": ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00"],
 
   "rooms": [
-    {"id": "R101", "capacity": 40},
-    {"id": "R102", "capacity": 60},
-    {"id": "R201", "capacity": 100},
-    {"id": "AUD1", "capacity": 180}
+    {"id": "R101", "capacity": 35},
+    {"id": "R102", "capacity": 45},
+    {"id": "R103", "capacity": 55},
+    {"id": "R201", "capacity": 70},
+    {"id": "R202", "capacity": 85},
+    {"id": "LAB1", "capacity": 40},
+    {"id": "LAB2", "capacity": 65},
+    {"id": "AUD1", "capacity": 120},
+    {"id": "AUD2", "capacity": 160},
+    {"id": "HALL1", "capacity": 220}
   ],
 
   "classes": [
-    {"id": "CS101", "students": 120, "professor": "P1"},
-    {"id": "MATH101", "students": 100, "professor": "P2"},
-    {"id": "DB201", "students": 80, "professor": "P3"},
-    {"id": "AI301", "students": 70, "professor": "P1"},
-    {"id": "WEB102", "students": 55, "professor": "P4"},
-    {"id": "SE202", "students": 50, "professor": "P5"},
-    {"id": "NET203", "students": 45, "professor": "P3"},
-    {"id": "ENG101", "students": 35, "professor": "P6"},
-    {"id": "BUS101", "students": 30, "professor": "P7"},
-    {"id": "HIST101", "students": 25, "professor": "P8"}
+    {"id": "CS101", "students": 170, "professor": "P1"},
+    {"id": "PROG101", "students": 155, "professor": "P2"},
+    {"id": "MATH101", "students": 145, "professor": "P3"},
+    {"id": "WEB102", "students": 95, "professor": "P4"},
+
+    {"id": "DB201", "students": 110, "professor": "P5"},
+    {"id": "SE202", "students": 90, "professor": "P6"},
+    {"id": "OS203", "students": 82, "professor": "P7"},
+    {"id": "NET204", "students": 78, "professor": "P8"},
+
+    {"id": "AI301", "students": 120, "professor": "P1"},
+    {"id": "ML302", "students": 105, "professor": "P9"},
+    {"id": "STAT201", "students": 88, "professor": "P3"},
+    {"id": "DS210", "students": 72, "professor": "P10"},
+
+    {"id": "CYB301", "students": 75, "professor": "P8"},
+    {"id": "LAW110", "students": 66, "professor": "P11"},
+    {"id": "ETHICS120", "students": 60, "professor": "P12"},
+
+    {"id": "IOT220", "students": 58, "professor": "P2"},
+    {"id": "CLOUD305", "students": 68, "professor": "P5"},
+    {"id": "PM250", "students": 62, "professor": "P6"},
+
+    {"id": "BUS101", "students": 135, "professor": "P11"},
+    {"id": "ECON102", "students": 125, "professor": "P12"},
+    {"id": "FIN201", "students": 92, "professor": "P9"},
+    {"id": "MARK202", "students": 84, "professor": "P10"},
+
+    {"id": "ENG101", "students": 70, "professor": "P4"},
+    {"id": "GER101", "students": 38, "professor": "P7"},
+    {"id": "PSY101", "students": 52, "professor": "P11"},
+
+    {"id": "HCI230", "students": 48, "professor": "P12"},
+    {"id": "UX240", "students": 42, "professor": "P10"},
+    {"id": "DES101", "students": 34, "professor": "P7"},
+    {"id": "MEDIA150", "students": 46, "professor": "P4"},
+    {"id": "ENTR130", "students": 74, "professor": "P9"}
   ],
 
   "student_groups": {
-    "G1_ComputerScience": ["CS101", "MATH101", "WEB102"],
-    "G2_DataScience": ["MATH101", "DB201", "AI301"],
-    "G3_Networking": ["CS101", "NET203", "SE202"],
-    "G4_Business": ["BUS101", "ENG101"],
-    "G5_General": ["HIST101", "ENG101"]
+    "G1_CS_Year1": ["CS101", "PROG101", "MATH101", "WEB102", "ENG101"],
+    "G2_CS_Year2": ["DB201", "SE202", "OS203", "NET204", "PM250"],
+    "G3_AI_DataScience": ["AI301", "ML302", "STAT201", "DS210", "ETHICS120"],
+    "G4_CyberSecurity": ["CYB301", "NET204", "OS203", "LAW110", "ETHICS120"],
+    "G5_IoT_Cloud": ["IOT220", "CLOUD305", "DB201", "NET204", "PM250"],
+    "G6_Business": ["BUS101", "ECON102", "FIN201", "MARK202", "ENTR130"],
+    "G7_Design_Media": ["HCI230", "UX240", "DES101", "MEDIA150", "PSY101"],
+    "G8_General_Electives": ["ENG101", "GER101", "LAW110", "ETHICS120", "PSY101"]
   }
 }

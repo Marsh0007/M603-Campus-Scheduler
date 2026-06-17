@@ -7,6 +7,7 @@ def save_results(
     conflict_report,
     quality_analysis,
     professor_analysis,
+    conflict_analysis=None,
     file_path="results/final_schedule.json"
 ):
     os.makedirs(os.path.dirname(file_path), exist_ok=True)
@@ -17,6 +18,9 @@ def save_results(
         "quality_analysis": quality_analysis,
         "professor_analysis": professor_analysis
     }
+
+    if conflict_analysis:
+        output["conflict_analysis"] = conflict_analysis
 
     with open(file_path, "w") as file:
         json.dump(output, file, indent=4)

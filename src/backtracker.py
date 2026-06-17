@@ -5,33 +5,40 @@ def find_unscheduled_classes(schedule):
     ]
 
 
+def get_class_groups(class_id, student_groups):
+    groups = []
+
+    for group, class_list in student_groups.items():
+        if class_id in class_list:
+            groups.append(group)
+
+    return groups
+
+
 def has_student_group_conflict(class_id, time_slot, schedule, student_groups):
-    """
-    Checks whether the class has a student group conflict at the given time slot.
-    If two classes belong to the same student group, they cannot be scheduled
-    at the same time.
-    """
-    for group_classes in student_groups.values():
-        if class_id in group_classes:
-            for item in schedule:
-                if (
-                    item["status"] == "Scheduled"
-                    and item["time"] == time_slot
-                    and item["class_id"] in group_classes
-                ):
-                    return True
+    current_groups = get_class_groups(class_id, student_groups)
+
+    for item in schedule:
+        if item["status"] != "Scheduled":
+            continue
+
+        if item["time"] != time_slot:
+            continue
+
+        existing_groups = get_class_groups(item["class"], student_groups)
+
+        for group in current_groups:
+            if group in existing_groups:
+                return True
+
     return False
 
 
 def is_valid_assignment(class_item, room, time_slot, schedule, student_groups):
-    """
-    Checks whether assigning a class to a room and time slot is valid.
-    """
     class_id = class_item["id"]
     professor = class_item["professor"]
     students = class_item["students"]
 
-    # Room must be large enough
     if room["capacity"] < students:
         return False
 
@@ -39,98 +46,182 @@ def is_valid_assignment(class_item, room, time_slot, schedule, student_groups):
         if item["status"] != "Scheduled":
             continue
 
-        # Room cannot be double-booked
         if item["time"] == time_slot and item["room"] == room["id"]:
             return False
 
-        # Professor cannot teach two classes at the same time
-        if item["time"] == time_slot and item.get("professor") == professor:
+        if item["time"] == time_slot and item["professor"] == professor:
             return False
 
-    # Student group cannot attend two classes at the same time
     if has_student_group_conflict(class_id, time_slot, schedule, student_groups):
         return False
 
     return True
 
 
-def recursive_backtracking(classes, rooms, time_slots, student_groups, schedule, index=0):
-    """
-    Recursive backtracking scheduler.
+def count_scheduled(schedule):
+    return len([
+        item for item in schedule
+        if item["status"] == "Scheduled"
+    ])
 
-    It tries to assign each class to a valid room and time slot.
-    If a later class cannot be scheduled, the algorithm backtracks by
-    removing the previous assignment and trying another option.
-    """
+
+def recursive_best_effort(
+    classes,
+    rooms,
+    time_slots,
+    student_groups,
+    index,
+    schedule,
+    best_result
+):
     if index == len(classes):
-        return True
+        scheduled_count = count_scheduled(schedule)
+
+        if scheduled_count > best_result["scheduled_count"]:
+            best_result["scheduled_count"] = scheduled_count
+            best_result["schedule"] = [
+                item.copy() for item in schedule
+            ]
+
+        return
 
     class_item = classes[index]
+    placed_anywhere = False
 
-    # Try every time slot and room combination
     for time_slot in time_slots:
         for room in rooms:
-            if is_valid_assignment(class_item, room, time_slot, schedule, student_groups):
+            if is_valid_assignment(
+                class_item,
+                room,
+                time_slot,
+                schedule,
+                student_groups
+            ):
+                placed_anywhere = True
                 waste = room["capacity"] - class_item["students"]
 
                 schedule.append({
-                    "class_id": class_item["id"],
+                    "class": class_item["id"],
+                    "students": class_item["students"],
+                    "professor": class_item["professor"],
                     "time": time_slot,
                     "room": room["id"],
-                    "waste": waste,
-                    "status": "Scheduled",
-                    "professor": class_item["professor"]
+                    "wasted_seats": waste,
+                    "status": "Scheduled"
                 })
 
-                # Move to next class
-                if recursive_backtracking(classes, rooms, time_slots, student_groups, schedule, index + 1):
-                    return True
+                recursive_best_effort(
+                    classes,
+                    rooms,
+                    time_slots,
+                    student_groups,
+                    index + 1,
+                    schedule,
+                    best_result
+                )
 
-                # Undo assignment if it leads to failure
                 schedule.pop()
 
-    return False
+    if not placed_anywhere:
+        schedule.append({
+            "class": class_item["id"],
+            "students": class_item["students"],
+            "professor": class_item["professor"],
+            "time": "N/A",
+            "room": "N/A",
+            "wasted_seats": 0,
+            "status": "Unscheduled",
+            "reason": "No valid room/time slot found"
+        })
+
+        recursive_best_effort(
+            classes,
+            rooms,
+            time_slots,
+            student_groups,
+            index + 1,
+            schedule,
+            best_result
+        )
+
+        schedule.pop()
 
 
-def run_best_effort_backtracking(classes, rooms, time_slots, student_groups):
-    """
-    Runs recursive backtracking. If a complete schedule is impossible,
-    it keeps a best-effort partial schedule and marks remaining classes
-    as unscheduled.
-    """
-    schedule = []
+def run_best_effort_backtracking(
+    classes,
+    rooms,
+    time_slots,
+    student_groups,
+    initial_schedule=None
+):
+    sorted_classes = sorted(
+        classes,
+        key=lambda x: x["students"],
+        reverse=True
+    )
 
-    # Sort large classes first because they are harder to place
-    sorted_classes = sorted(classes, key=lambda x: x["students"], reverse=True)
+    if initial_schedule is None:
+        initial_schedule = []
 
-    success = recursive_backtracking(
+    starting_schedule = [
+        item.copy() for item in initial_schedule
+    ]
+
+    best_result = {
+        "scheduled_count": count_scheduled(starting_schedule),
+        "schedule": [
+            item.copy() for item in starting_schedule
+        ]
+    }
+
+    recursive_best_effort(
         sorted_classes,
         rooms,
         time_slots,
         student_groups,
-        schedule
+        0,
+        starting_schedule,
+        best_result
     )
 
-    scheduled_ids = {item["class_id"] for item in schedule}
+    final_schedule = best_result["schedule"]
+
+    scheduled_ids = {
+        item["class"] for item in final_schedule
+        if item["status"] == "Scheduled"
+    }
+
+    existing_ids = {
+        item["class"] for item in final_schedule
+    }
 
     for class_item in sorted_classes:
-        if class_item["id"] not in scheduled_ids:
-            schedule.append({
-                "class_id": class_item["id"],
+        if (
+            class_item["id"] not in scheduled_ids
+            and class_item["id"] not in existing_ids
+        ):
+            final_schedule.append({
+                "class": class_item["id"],
+                "students": class_item["students"],
+                "professor": class_item["professor"],
                 "time": "N/A",
                 "room": "N/A",
-                "waste": "N/A",
+                "wasted_seats": 0,
                 "status": "Unscheduled",
-                "professor": class_item["professor"],
-                "reason": "No valid room/time slot found after recursive backtracking"
+                "reason": "No valid room/time slot found"
             })
 
     total_waste = sum(
-        item["waste"] for item in schedule
+        item["wasted_seats"] for item in final_schedule
         if item["status"] == "Scheduled"
     )
 
-    return schedule, total_waste, success
+    success = all(
+        item["status"] == "Scheduled"
+        for item in final_schedule
+    )
+
+    return final_schedule, total_waste, success
 
 
 def generate_conflict_report(final_schedule, total_waste):
@@ -144,12 +235,11 @@ def generate_conflict_report(final_schedule, total_waste):
         if item["status"] == "Unscheduled"
     ]
 
-    report = {
+    return {
         "total_classes": len(final_schedule),
         "scheduled_classes": len(scheduled),
         "unscheduled_classes": len(unscheduled),
         "total_capacity_waste": total_waste,
+        "manual_intervention_required": len(unscheduled) > 0,
         "unscheduled_details": unscheduled
     }
-
-    return report

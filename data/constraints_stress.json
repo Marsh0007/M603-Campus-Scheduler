@@ -1,0 +1,24 @@
+{
+    "time_slots": ["09:00", "10:00"],
+
+    "rooms": [
+        {"id": "R101", "capacity": 40},
+        {"id": "R102", "capacity": 60}
+    ],
+
+    "classes": [
+        {"id": "CS101", "students": 55, "professor": "P1"},
+        {"id": "PROG101", "students": 50, "professor": "P2"},
+        {"id": "MATH101", "students": 45, "professor": "P3"},
+        {"id": "WEB102", "students": 35, "professor": "P4"},
+        {"id": "AI301", "students": 70, "professor": "P1"},
+        {"id": "DB201", "students": 38, "professor": "P5"},
+        {"id": "SE202", "students": 42, "professor": "P6"}
+    ],
+
+    "student_groups": {
+        "Year1_CS": ["CS101", "PROG101", "MATH101", "WEB102"],
+        "Year2_CS": ["DB201", "SE202"],
+        "Year3_AI": ["AI301"]
+    }
+}

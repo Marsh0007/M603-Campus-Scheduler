@@ -28,7 +28,6 @@ def build_conflict_graph(data):
 
 
 def welsh_powell_coloring(graph, time_slots):
-    # Sort classes by number of conflicts, highest first
     sorted_classes = sorted(
         graph.keys(),
         key=lambda course: len(graph[course]),
@@ -53,6 +52,6 @@ def welsh_powell_coloring(graph, time_slots):
                 break
 
         if not assigned:
-            color_assignment[course] = "N/A"
+            color_assignment[course] = "Unassigned"
 
     return color_assignment

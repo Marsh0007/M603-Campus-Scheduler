@@ -1,57 +1,20 @@
-# M603 Campus Scheduler and Decision Support System
+# M603 Campus Scheduler
 
-## Advanced Algorithms (M603) Project
+**Advanced Algorithms (M603) – Individual Project**
 
-### Overview
-
-The Campus Scheduler and Decision Support System is designed to solve the university timetable scheduling problem using multiple algorithmic approaches.
-
-The system automatically generates a conflict-free timetable while minimizing room-capacity waste and identifying scheduling issues that require manual intervention.
-
-The project integrates four major algorithmic paradigms:
-
-* Greedy Algorithms
-* Graph Theory
-* Dynamic Programming
-* Recursive Backtracking
-
-The scheduler considers:
-
-* Professor conflicts
-* Student group conflicts
-* Room capacity constraints
-* Capacity waste minimization
-* Schedule quality evaluation
-* Professor workload analysis
+A timetable scheduling system for the university which comprises of four algorithimic stages to generate conflict free schedules while minimizing room capacity waste as much as possible.
 
 ---
 
-# Project Objectives
+## Project Structure
 
-The objective of this project is to develop an intelligent scheduling system capable of:
-
-1. Creating a valid university timetable.
-2. Preventing professor scheduling conflicts.
-3. Preventing student group scheduling conflicts.
-4. Optimizing room assignments.
-5. Reducing unused room capacity.
-6. Providing conflict reports for manual review.
-7. Supporting decision-making through schedule analytics.
-
----
-
-# Project Structure
-
-```text
+```
 M603_CampusScheduler/
-│
 ├── data/
-│   ├── constraints.json
-│   └── constraints_stress.json
-│
+│   ├── constraints.json          # Main dataset
+│   └── constraints_stress.json   # Stress test dataset
 ├── results/
 │   └── final_schedule.json
-│
 ├── src/
 │   ├── main.py
 │   ├── data_loader.py
@@ -65,344 +28,115 @@ M603_CampusScheduler/
 │   ├── professor_analyzer.py
 │   ├── reporter.py
 │   └── stress_test.py
-│
 ├── requirements.txt
 └── README.md
 ```
 
 ---
 
-# Stage 1 – Greedy Scheduling
-
-### Strategy
-
-Classes are sorted by student enrollment size in descending order.
-
-Larger classes are scheduled first because they are more difficult to place due to room-capacity constraints.
-
-### Process
-
-1. Sort classes by number of students.
-2. Search for the first available room and time slot.
-3. Assign the class if constraints are satisfied.
-4. Mark unscheduled classes if no feasible assignment exists.
-
-### Benefit
-
-Provides a fast baseline schedule and reduces the likelihood of large classes becoming impossible to place later.
-
-### Time Complexity
-
-```text
-O(C × T × R)
-```
-
-Where:
-
-* C = Number of Classes
-* T = Number of Time Slots
-* R = Number of Rooms
-
----
-
-# Stage 2 – Conflict Graph and Welsh-Powell Coloring
-
-### Strategy
-
-A conflict graph is created where:
-
-* Nodes represent classes.
-* Edges represent scheduling conflicts.
-
-Conflicts occur when:
-
-* Two classes share the same professor.
-* Two classes belong to the same student group.
-
-### Welsh-Powell Algorithm
-
-Classes are sorted according to the number of conflicts.
-
-Time slots are assigned using graph coloring principles.
-
-### Benefit
-
-Ensures conflicting classes are never assigned to the same time slot.
-
-### Time Complexity
-
-```text
-O(V²)
-```
-
-Where:
-
-* V = Number of Classes
-
----
-
-# Stage 3 – Dynamic Programming Room Optimization
-
-### Objective
-
-Minimize room-capacity waste after time slots have been assigned.
-
-### DP State
-
-```text
-(class_index, used_room_mask)
-```
-
-Meaning:
-
-```text
-The first class_index classes have been assigned
-using the rooms represented by used_room_mask.
-```
-
-### Recurrence
-
-For each class:
-
-1. Try every unused room.
-2. Verify room capacity.
-3. Compute wasted seats.
-4. Select the assignment with minimum total waste.
-
-### Benefit
-
-Produces significantly better room utilization than the greedy baseline.
-
-### Time Complexity
-
-```text
-O(C × 2^R × R)
-```
-
----
-
-# Stage 4 – Best-Effort Recursive Backtracking
-
-### Objective
-
-Recover classes that remain unscheduled after previous stages.
-
-### Strategy
-
-The algorithm recursively explores alternative room and time-slot assignments.
-
-If a valid placement cannot be found:
-
-* The class is marked as Unscheduled.
-* A reason is recorded.
-* Manual intervention is recommended.
-
-### Benefit
-
-Improves schedule completeness under tight constraints.
-
-### Time Complexity
-
-```text
-O((T × R)^C)
-```
-
-Worst-case complexity.
-
----
-
-# Conflict Report
-
-The system produces a conflict report highlighting scheduling outcomes.
-
-Example:
-
-```text
-Scheduled CS101 09:00 HALL1 Perfect Fit
-
-Scheduled DB201 10:00 AUD1 Wasted 10 seats
-
-Unscheduled AI301 N/A N/A
-```
-
-The report contains:
-
-* Total classes
-* Scheduled classes
-* Unscheduled classes
-* Capacity waste
-* Manual intervention recommendations
-
----
-
-# Manual Fix Log
-
-In situations where the scheduler cannot place all classes automatically, the remaining conflicts are reported to a timetable administrator.
-
-Possible manual resolutions include:
-
-* Opening additional rooms.
-* Creating new time slots.
-* Assigning substitute professors.
-* Moving low-priority courses.
-* Increasing room availability.
-
-This allows the final 1–2% of scheduling conflicts to be resolved manually.
-
----
-
-# Validation System
-
-The validator verifies that the generated schedule satisfies all constraints.
-
-Checks include:
-
-* Room double-booking
-* Professor conflicts
-* Student group conflicts
-
-Example Output:
-
-```text
-Schedule Valid: True
-Room Conflicts: 0
-Professor Conflicts: 0
-Student Group Conflicts: 0
-```
-
----
-
-# Conflict Analysis
-
-The project compares scheduling quality before and after optimization.
-
-Metrics:
-
-* Greedy schedule conflicts
-* Final schedule conflicts
-* Conflict reduction
-
-Example:
-
-```text
-Greedy Conflicts: 4
-Final Schedule Conflicts: 0
-```
-
----
-
-# Schedule Quality Analysis
-
-Additional decision-support metrics include:
-
-* Total capacity waste
-* Waste reduction
-* Scheduling success rate
-* Quality score
-
-Example:
-
-```text
-Greedy Waste: 706
-Optimized Waste: 671
-Waste Improvement: 35
-Scheduling Success Rate: 100%
-Quality Score: 95.53 / 100
-```
-
----
-
-# Professor Workload Analysis
-
-The system evaluates teaching workload distribution.
-
-Metrics:
-
-* Classes per professor
-* Maximum workload
-* Minimum workload
-* Load difference
-
-Example:
-
-```text
-Maximum Load: 3
-Minimum Load: 2
-Load Difference: 1
-```
-
----
-
-# Stress Test
-
-A dedicated stress-testing dataset is included.
-
-File:
-
-```text
-data/constraints_stress.json
-```
-
-Purpose:
-
-* Limited rooms
-* Limited time slots
-* High conflict density
-
-This dataset demonstrates the effectiveness of the backtracking recovery mechanism when complete scheduling is impossible.
-
----
-
-# Running the Project
-
-Install dependencies:
+## How to Run
 
 ```bash
 pip install -r requirements.txt
-```
 
-Run the main scheduler:
-
-```bash
+# Main dataset
 python src/main.py
-```
 
-Run the stress test:
-
-```bash
+# Stress test
 python src/stress_test.py
 ```
 
 ---
 
-# Results Generated
+## Algorithm Justification
 
-The system generates:
+| Stage | Algorithm | Complexity | Justification |
+|-------|-----------|------------|---------------|
+| 1 | Greedy Scheduling | O(C × T × R) | Fast baseline; linear per class so it scales to thousands of classes instantly |
+| 2 | Welsh-Powell Graph Coloring | O(V²) | Quadratic on class count, acceptable since V ≤ 300 in realistic university scenarios |
+| 3 | Bitmask Dynamic Programming | O(C × 2^R × R) | Exponential on rooms per slot, kept tractable by applying DP one time slot at a time with a small room set |
+| 4 | Recursive Backtracking | O((T × R)^C) worst case | Used only for residual unscheduled classes; pruning limits explored branches significantly |
 
-* Final Schedule
-* Conflict Report
-* Validation Report
-* Schedule Quality Analysis
-* Conflict Analysis
-* Professor Workload Analysis
+*C = classes, T = time slots, R = rooms per slot, V = class nodes*
 
-Output file:
+---
 
-```text
-results/final_schedule.json
+## Stage Descriptions
+
+**Stage 1 – Greedy Baseline (`greedy_solver.py`)**  
+Classes are organized by enrollment (lowest to highest). Larger classes are given priority because they need larger rooms; if large classes are scheduled first, only small rooms will be available. Professor and student-group constraints are used to assign each class to the first (room, time slot) pair that meets both constraints.
+
+**Stage 2 – Conflict Graph & Welsh-Powell Coloring (`graph_engine.py`)**  
+A conflict graph is constructed with nodes representing classes and edges connect any two classes that are taught by a common professor or a common group of students. A coloring of the process nodes that satisfies Welsh-Powell is obtained by coloring the nodes in decreasing degree order, so that no two nodes in the same class compete for the same time slot. This prevents the root cause of conflicts even prior to allocation of rooms.
+
+**Stage 3 – Dynamic Programming Room Optimizer (`optimizer.py`)**  
+With time slots fixed by Stage 2, a bitmask DP assigns rooms within each slot to minimise wasted seat capacity.  
+- **State:** `(class_index, used_room_mask)` — classes processed so far and which rooms are occupied  
+- **Recurrence:** For each unassigned class, try every feasible unused room, compute wasted seats, and retain the assignment with the lowest cumulative waste  
+- **Advantage over brute force:** Instead of evaluating all room permutations (R! per slot), the DP reuses subproblem solutions, reducing the search space from factorial to O(C × 2^R × R)
+
+**Stage 4 – Best-Effort Backtracking (`backtracker.py`)**  
+A recursive search tries all other possible (slot, room) assignments for the class to be placed which is not yet assigned. If there is no valid placement to be found, the algorithm backtracks and marks the class as unscheduled with a reason. The search keeps the best partial solution that it finds — the assignment with maximum number of scheduled classes. 
+**Pruning strategy:** Infeasible branches (capacity violations, professor or student-group conflicts) are detected before recursion, avoiding expansion of invalid subtrees.
+
+---
+
+## Conflict Report
+
+The system produces a per-class scheduling outcome:
+
+```
+Scheduled   CS101    09:00   HALL1   Perfect Fit
+Scheduled   DB201    10:00   AUD1    Wasted 10 seats
+Unscheduled AI301    N/A     N/A     No valid slot — professor conflict
+```
+
+Summary metrics include total scheduled, total unscheduled, capacity waste, and validation status.
+
+---
+
+## Manual Fix Log
+
+When the scheduler cannot place all classes automatically, a conflict report identifies each unscheduled class and the reason for failure. A timetable administrator can resolve these cases by:
+
+- Opening an additional room or time slot
+- Assigning a substitute professor
+- Splitting an oversized class into two sections
+- Deferring low-priority courses to the following semester
+
+This workflow handles the residual 1 to 2% of conflicts that automated scheduling cannot resolve under strict constraints.
+
+---
+
+## Sample Results
+
+**Main dataset (30 classes):**
+```
+Scheduled:       30 / 30
+Conflicts:       0
+Validation:      Passed
+Greedy Waste:    706 seats
+Optimized Waste: 671 seats
+Waste Reduction: 35 seats
+Quality Score:   95.53 / 100
+```
+
+**Stress test:**
+```
+Stage 4 activated:    Yes
+Classes recovered:    3
+Unscheduled:          1 (manual intervention required)
 ```
 
 ---
 
-# Conclusion
+## Validation
 
-The Campus Scheduler demonstrates how multiple algorithmic paradigms can be combined to solve a real-world university scheduling problem.
+The validator confirms the final schedule satisfies all hard constraints:
 
-The system successfully integrates:
-
-* Greedy Scheduling
-* Graph Coloring
-* Dynamic Programming
-* Recursive Backtracking
-
-to produce efficient, conflict-free timetables while supporting human decision-makers through analytics and conflict reporting.
+```
+Room Conflicts:          0
+Professor Conflicts:     0
+Student Group Conflicts: 0
+Schedule Valid:          True
+```

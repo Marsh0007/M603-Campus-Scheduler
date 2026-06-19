@@ -1,3 +1,6 @@
+import json
+import os
+
 from data_loader import load_constraints
 from graph_engine import build_conflict_graph, welsh_powell_coloring
 from optimizer import assign_rooms
@@ -17,6 +20,24 @@ def print_schedule(title, schedule):
         )
 
 
+def save_stress_results(
+    final_schedule,
+    conflict_report,
+    file_path="results/stress_test_results.json"
+):
+    os.makedirs(os.path.dirname(file_path), exist_ok=True)
+
+    output = {
+        "stress_test_schedule": final_schedule,
+        "stress_test_conflict_report": conflict_report
+    }
+
+    with open(file_path, "w") as file:
+        json.dump(output, file, indent=4)
+
+    return file_path
+
+
 def main():
     data = load_constraints("data/constraints_stress.json")
 
@@ -31,6 +52,11 @@ def main():
     final_schedule, total_waste = assign_rooms(time_assignment, data)
 
     print_schedule("STRESS TEST: STAGE 3 RESULT", final_schedule)
+
+    scheduled_classes = [
+        item for item in final_schedule
+        if item["status"] == "Scheduled"
+    ]
 
     unscheduled_classes = [
         course
@@ -49,25 +75,32 @@ def main():
             unscheduled_classes,
             data["rooms"],
             data["time_slots"],
-            data["student_groups"]
+            data["student_groups"],
+            initial_schedule=scheduled_classes
         )
+
+        final_stress_schedule = backtracking_schedule
+        final_stress_waste = backtracking_waste
 
         print_schedule(
             "STRESS TEST: STAGE 4 BACKTRACKING RESULT",
-            backtracking_schedule
+            final_stress_schedule
         )
 
         conflict_report = generate_conflict_report(
-            backtracking_schedule,
-            backtracking_waste
+            final_stress_schedule,
+            final_stress_waste
         )
 
     else:
         print("\nStage 4 not required.")
 
+        final_stress_schedule = final_schedule
+        final_stress_waste = total_waste
+
         conflict_report = generate_conflict_report(
-            final_schedule,
-            total_waste
+            final_stress_schedule,
+            final_stress_waste
         )
 
     print("\n===== STRESS TEST: CONFLICT REPORT =====\n")
@@ -83,6 +116,13 @@ def main():
                 f"{item['class']} could not be scheduled. "
                 f"Reason: {item.get('reason', 'No feasible assignment found')}"
             )
+
+    saved_file = save_stress_results(
+        final_stress_schedule,
+        conflict_report
+    )
+
+    print(f"\nStress test results saved to: {saved_file}")
 
 
 if __name__ == "__main__":

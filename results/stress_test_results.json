@@ -1,0 +1,120 @@
+{
+    "stress_test_schedule": [
+        {
+            "class": "CS101",
+            "students": 55,
+            "professor": "P1",
+            "time": "09:00",
+            "room": "R102",
+            "wasted_seats": 5,
+            "status": "Scheduled"
+        },
+        {
+            "class": "DB201",
+            "students": 38,
+            "professor": "P5",
+            "time": "09:00",
+            "room": "R101",
+            "wasted_seats": 2,
+            "status": "Scheduled"
+        },
+        {
+            "class": "PROG101",
+            "students": 50,
+            "professor": "P2",
+            "time": "10:00",
+            "room": "R102",
+            "wasted_seats": 10,
+            "status": "Scheduled"
+        },
+        {
+            "class": "AI301",
+            "students": 70,
+            "professor": "P1",
+            "time": "N/A",
+            "room": "N/A",
+            "wasted_seats": 0,
+            "status": "Unscheduled",
+            "reason": "No valid room/time slot found"
+        },
+        {
+            "class": "MATH101",
+            "students": 45,
+            "professor": "P3",
+            "time": "N/A",
+            "room": "N/A",
+            "wasted_seats": 0,
+            "status": "Unscheduled",
+            "reason": "No valid room/time slot found"
+        },
+        {
+            "class": "SE202",
+            "students": 42,
+            "professor": "P6",
+            "time": "N/A",
+            "room": "N/A",
+            "wasted_seats": 0,
+            "status": "Unscheduled",
+            "reason": "No valid room/time slot found"
+        },
+        {
+            "class": "WEB102",
+            "students": 35,
+            "professor": "P4",
+            "time": "N/A",
+            "room": "N/A",
+            "wasted_seats": 0,
+            "status": "Unscheduled",
+            "reason": "No valid room/time slot found"
+        }
+    ],
+    "stress_test_conflict_report": {
+        "total_classes": 7,
+        "scheduled_classes": 3,
+        "unscheduled_classes": 4,
+        "total_capacity_waste": 17,
+        "manual_intervention_required": true,
+        "unscheduled_details": [
+            {
+                "class": "AI301",
+                "students": 70,
+                "professor": "P1",
+                "time": "N/A",
+                "room": "N/A",
+                "wasted_seats": 0,
+                "status": "Unscheduled",
+                "reason": "No valid room/time slot found"
+            },
+            {
+                "class": "MATH101",
+                "students": 45,
+                "professor": "P3",
+                "time": "N/A",
+                "room": "N/A",
+                "wasted_seats": 0,
+                "status": "Unscheduled",
+                "reason": "No valid room/time slot found"
+            },
+            {
+                "class": "SE202",
+                "students": 42,
+                "professor": "P6",
+                "time": "N/A",
+                "room": "N/A",
+                "wasted_seats": 0,
+                "status": "Unscheduled",
+                "reason": "No valid room/time slot found"
+            },
+            {
+                "class": "WEB102",
+                "students": 35,
+                "professor": "P4",
+                "time": "N/A",
+                "room": "N/A",
+                "wasted_seats": 0,
+                "status": "Unscheduled",
+                "reason": "No valid room/time slot found"
+            }
+        ]
+    }
+}

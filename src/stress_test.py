@@ -11,13 +11,25 @@ def print_schedule(title, schedule):
     print(f"\n===== {title} =====\n")
 
     for item in schedule:
-        print(
-            f"{item['class']} | "
-            f"{item['time']} | "
-            f"{item['room']} | "
-            f"Waste: {item['wasted_seats']} | "
-            f"{item['status']}"
-        )
+
+        if item["status"] == "Scheduled":
+
+            if item["wasted_seats"] == 0:
+                fit_text = "Perfect Fit"
+            else:
+                fit_text = f"Wasted {item['wasted_seats']} seats"
+
+            print(
+                f"Scheduled {item['class']} "
+                f"{item['time']} "
+                f"{item['room']} "
+                f"{fit_text}"
+            )
+
+        else:
+            print(
+                f"Unscheduled {item['class']} N/A N/A"
+            )
 
 
 def save_stress_results(

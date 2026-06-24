@@ -174,7 +174,7 @@ def main():
         final_schedule
     )
 
-    print("\n===== UNIQUE FEATURE: SCHEDULE QUALITY ANALYSIS =====\n")
+    print("\n===== SCHEDULE QUALITY ANALYSIS =====\n")
     print(f"Greedy Waste: {quality_analysis['greedy_waste']}")
     print(f"Optimized Waste: {quality_analysis['optimized_waste']}")
     print(
@@ -199,7 +199,7 @@ def main():
         data
     )
 
-    print("\n===== UNIQUE FEATURE: PROFESSOR WORKLOAD ANALYSIS =====\n")
+    print("\n===== PROFESSOR WORKLOAD ANALYSIS =====\n")
     for professor, count in professor_analysis["professor_workload"].items():
         print(f"{professor}: {count} classes")
 
